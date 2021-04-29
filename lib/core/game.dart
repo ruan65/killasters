@@ -2,7 +2,7 @@ import 'dart:isolate';
 
 import 'package:flutter/material.dart';
 import 'package:killasters/core/main_loop.dart';
-import 'package:killasters/entities/player.dart';
+import 'package:killasters/utils/global_vars.dart';
 
 class Game extends StatefulWidget {
   @override
@@ -13,30 +13,30 @@ class _GameState extends State<Game> {
   ReceivePort _receivePort;
   Isolate _isolateLoop;
 
-  Player player;
-
-  void startIsolateLoop() async {
+  void _startIsolateLoop() async {
     _receivePort = ReceivePort();
     _isolateLoop = await Isolate.spawn(mainLoop, _receivePort.sendPort);
     _receivePort.listen((message) {
-      player.update();
+      GlobalVars.currentScene.update();
       setState(() {});
     });
   }
 
   @override
   void initState() {
-    startIsolateLoop();
-    player = Player();
+    _startIsolateLoop();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        player.build(),
-      ],
-    );
+    return GlobalVars.currentScene.buildScene();
+  }
+
+  @override
+  void dispose() {
+    _receivePort.close();
+    _isolateLoop.kill();
+    super.dispose();
   }
 }

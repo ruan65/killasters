@@ -14,7 +14,18 @@ void main() {
     ]);
     runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Game(),
+      home: SafeArea(child: Scaffold(body: App())),
     ));
   });
+}
+
+class App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/background.png'), fit: BoxFit.cover)),
+        child: Game());
+  }
 }
