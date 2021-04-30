@@ -39,5 +39,14 @@ class GameScene extends AppScene {
     print(_startGlobalPosition);
   }
 
-  void _onPanUpdate(DragUpdateDetails details) {}
+  void _onPanUpdate(DragUpdateDetails details) {
+    double updateGlobalPosition = details.globalPosition.dx;
+
+    if (updateGlobalPosition > _startGlobalPosition + 30) {
+      _player.isMoveRight = true;
+    }
+    if (updateGlobalPosition < _startGlobalPosition - 30) {
+      _player.isMoveLeft = true;
+    }
+  }
 }
