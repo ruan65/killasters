@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:killasters/core/game.dart';
+import 'package:killasters/utils/global_vars.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,16 +11,27 @@ void main() {
     DeviceOrientation.landscapeRight,
   ]).whenComplete(() async {
     await SystemChrome.setEnabledSystemUIOverlays([
-      SystemUiOverlay.bottom,
+      // SystemUiOverlay.bottom,
     ]);
     runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SafeArea(child: Scaffold(body: App())),
+      home: App(),
     ));
   });
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
+  @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  @override
+  void didChangeDependencies() {
+    initGame(context);
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,5 +39,10 @@ class App extends StatelessWidget {
             image: DecorationImage(
                 image: AssetImage('assets/background.png'), fit: BoxFit.cover)),
         child: Game());
+  }
+
+  void initGame(BuildContext context) {
+    GlobalVars.screenHeight = MediaQuery.of(context).size.height;
+    GlobalVars.screenWidth = MediaQuery.of(context).size.width;
   }
 }
