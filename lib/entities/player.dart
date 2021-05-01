@@ -11,6 +11,9 @@ class Player extends Entity {
   bool isMoveLeft = false;
   bool isMoveRight = false;
   double _speed = 2;
+  bool accelerate = false;
+
+  get angle => _angle;
 
   Player() : super('player') {
     x = 50;
@@ -30,6 +33,7 @@ class Player extends Entity {
 
   @override
   void move() {
+    if (!accelerate) return;
     if (isMoveLeft) _degree -= 5;
     if (isMoveRight) _degree += 5;
     _angle = _degree * pi / 180;
